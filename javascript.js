@@ -1,6 +1,7 @@
 const cells = document.querySelectorAll(".cell");
 const screen = document.getElementById("screen");
 const clear = document.getElementById("CE");
+const clearCur = document.getElementById("C");
 
 
 function isNumber(text) {
@@ -71,10 +72,34 @@ function clearDisplay() {
     console.log("The process got cleared!")
 }
 
+function clearCurrent() {
+    if(operation.secondPart != "") {
+        console.log("Second part has a value in it");
+        operation.secondPart = "";
+
+        //Reset Screen to initial value
+        displayed = "0";
+        screen.textContent = displayed;
+    } else if (operation.firstPart != ""){
+        console.log("First part has a value in it");
+        operation.firstPart = "";
+
+        //Reset Screen to initial value
+        displayed = "0";
+        screen.textContent = displayed;
+    } else {
+        console.log("No value to clear!")
+    }
+}
+
 clear.addEventListener("click", clearDisplay);
+clearCur.addEventListener("click", clearCurrent);
+
 
 cells.forEach(cell => {
     cell.addEventListener("click", e => {
         numberPressed(e);
     })
 })
+
+
