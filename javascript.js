@@ -76,7 +76,14 @@ function numberPressed(e) {
         //logic to write the second number block (after a operator is selected)
         } else {
                 //add to secondPart
-                if (displayed == operation.firstPart && operation.secondPart == "") {
+                if (displaysZero()) {
+                    console.log("Pressed: ", e.target.innerText, " and added it to secondPart");
+                    displayed = e.target.innerText;
+                    operation.secondPart = displayed;
+
+                    //Update Screen
+                    screen.textContent = displayed;
+                } else if (displayed == operation.firstPart && operation.secondPart == "") {
                     console.log("Pressed: ", e.target.innerText, " and added it to secondPart");
                     displayed = e.target.innerText;
                     operation.secondPart = displayed;
