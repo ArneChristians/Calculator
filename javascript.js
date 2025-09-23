@@ -30,7 +30,15 @@ function multiply(a, b) {
 }
 
 function divide(a, b) {
-    return Number(a) / Number(b);
+    let error = "Can't divide by 0";
+    const x = Number(a);
+    const y = Number(b);
+
+    if (y === 0) {
+        return error;
+    }
+
+    return x / y;
 }
 
 const operation = {
@@ -68,6 +76,21 @@ function numberPressed(e) {
         //logic to write the second number block (after a operator is selected)
         } else {
                 //add to secondPart
+                if (displayed == operation.firstPart && operation.secondPart == "") {
+                    console.log("Pressed: ", e.target.innerText, " and added it to secondPart");
+                    displayed = e.target.innerText;
+                    operation.secondPart = displayed;
+
+                    //Update Screen
+                    screen.textContent = displayed;        
+                } else {
+                    console.log("Pressed: ", e.target.innerText, " and added it to secondPart");
+                    displayed =`${displayed}`+`${e.target.innerText}`;
+                    operation.secondPart = displayed;
+
+                    //Update Screen
+                    screen.textContent = displayed;
+                }
             }
     } else {
                 console.log(e.target.innerText, " is not a Number!");
@@ -95,7 +118,6 @@ function equalsPressed() {
     let first = operation.firstPart;
     let second = operation.secondPart;
     let op = operation.operator;
-    let result = "";
     
     // does firstPart, secondPart and operator contain a value?
     if(first != "" && second != "" && op != null) {
@@ -131,7 +153,13 @@ function equalsPressed() {
                 break;
          }
          
-         clearButResult(result);
+        if (operation.result != "Can't divide by 0") {
+            clearButResult(operation.result);
+            console.log("Value is not divided by Zero")
+        } else {
+            clearDisplay();
+            console.log("Value is divided by Zero")
+        }   
     }
 }
 
@@ -153,6 +181,7 @@ function clearDisplay() {
     operation.firstPart = "";
     operation.operator = null;
     operation.secondPart = "";
+    operation.result = "";
 
     console.log("The process got cleared!")
 }
