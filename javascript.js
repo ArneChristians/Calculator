@@ -2,6 +2,9 @@ const cells = document.querySelectorAll(".cell");
 const screen = document.getElementById("screen");
 const clear = document.getElementById("CE");
 const clearCur = document.getElementById("C");
+const equals = document.getElementById("equals");
+
+let displayed = screen.textContent;
 
 //checks
 function isNumber(text) {
@@ -9,32 +12,32 @@ function isNumber(text) {
 }
 
 function isOperator(text) {
-    return 
+    const operators = ["+", "-", "*", "/"];
+    return operators.includes(text);
 }
 
 // operations
 function add(a, b) {
-    return a + b;
+    return Number(a) + Number(b);
 }
 
 function subtract(a, b) {
-    return a - b;
+    return Number(a) - Number(b);
 }
 
 function multiply(a, b) {
-    return a * b;
+    return Number(a) * Number(b);
 }
 
 function divide(a, b) {
-    return a / b;
+    return Number(a) / Number(b);
 }
-
-let displayed = screen.textContent;
 
 const operation = {
     firstPart: "",
     operator: null,
     secondPart: "",
+    result: "",
 }
 
 function displaysZero() {
@@ -73,11 +76,76 @@ function numberPressed(e) {
 
 //logic for pressing a operator button
 function operatorPressed(e) {
-
+    let pressedButton = e.target.innerText;
+    //is targeted(clicked) element an operator and firstPart has something in it
+    if(isOperator(pressedButton) && operation.firstPart != "") {
+        console.log("Test completet! Operator has been clicked")
+        //change operator obj's value to the operator that was clicked
+        operation.operator = pressedButton;
+    //Result is displayed
+    } else if (isOperator(pressedButton) && operation.result != "") {
+        operation.firstPart = operation.result;
+        operation.result = "";
+        operation.operator = pressedButton;
+    }
 }
+
+//logic for pressing equals
+function equalsPressed() {
+    let first = operation.firstPart;
+    let second = operation.secondPart;
+    let op = operation.operator;
+    let result = "";
+    
+    // does firstPart, secondPart and operator contain a value?
+    if(first != "" && second != "" && op != null) {
+        //uses corosponding function to calculate the result
+         switch(op){
+            case "+":
+                operation.result = add(first, second).toString();
+                displayed = operation.result;
+
+                //Update screen with result
+                screen.textContent = displayed;
+                break;
+            case "-":
+                operation.result = subtract(first, second).toString();
+                displayed = operation.result;
+
+                //Update screen with result
+                screen.textContent = displayed;
+                break;
+            case "*":
+                operation.result = multiply(first, second).toString();
+                displayed = operation.result;
+
+                //Update screen with result
+                screen.textContent = displayed;
+                break;
+            case "/":
+                operation.result = divide(first, second).toString();
+                displayed = operation.result;
+
+                //Update screen with result
+                screen.textContent = displayed;
+                break;
+         }
+         
+         clearButResult(result);
+    }
+}
+
+equals.addEventListener("click", equalsPressed);
+
 
 
 //clear functions block start
+function clearButResult (result) {
+    operation.firstPart = result;
+    operation.operator = null;
+    operation.secondPart = "";
+}
+
 function clearDisplay() {
     displayed = "0";
     screen.textContent = displayed;
@@ -114,10 +182,11 @@ clearCur.addEventListener("click", clearCurrent);
 //clear function block end
 
 
-
+//Click Events
 cells.forEach(cell => {
     cell.addEventListener("click", e => {
         numberPressed(e);
+        operatorPressed(e);
     })
 })
 
