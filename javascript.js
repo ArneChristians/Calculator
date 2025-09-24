@@ -74,6 +74,30 @@ function numberPressed(e) {
                 screen.textContent = displayed;
             }
         //logic to write the second number block (after a operator is selected)
+        } else if (operation.operator != null) {
+            if (displaysZero()) {
+                    console.log("Pressed: ", e.target.innerText, " and added it to secondPart");
+                    displayed = e.target.innerText;
+                    operation.secondPart = displayed;
+
+                    //Update Screen
+                    screen.textContent = displayed;
+                } else if (displayed == operation.firstPart && operation.secondPart == "") {
+                    console.log("Pressed: ", e.target.innerText, " and added it to secondPart");
+                    displayed = e.target.innerText;
+                    operation.secondPart = displayed;
+
+                    //Update Screen
+                    screen.textContent = displayed;        
+                } else {
+                    console.log("Pressed: ", e.target.innerText, " and added it to secondPart");
+                    displayed =`${displayed}`+`${e.target.innerText}`;
+                    operation.secondPart = displayed;
+
+                    //Update Screen
+                    screen.textContent = displayed;
+                }
+
         } else {
                 //add to secondPart
                 if (displaysZero()) {
@@ -108,11 +132,20 @@ function numberPressed(e) {
 function operatorPressed(e) {
     let pressedButton = e.target.innerText;
     //is targeted(clicked) element an operator and firstPart has something in it
-    if(isOperator(pressedButton) && operation.firstPart != "") {
+    if(isOperator(pressedButton) && operation.firstPart != "" && operation.secondPart == "") {
         console.log("Test completet! Operator has been clicked")
         //change operator obj's value to the operator that was clicked
         operation.operator = pressedButton;
     //Result is displayed
+    //Trigger once firstPart, operator and secondPart have a value
+    } else if (isOperator(pressedButton) && operation.result == "" && operation.firstPart != "" && operation.secondPart != "" && operation.operator != null){
+        //once an operator is pressed => equalsPressed() => firstPart == result => clear everything but firstPart (new Operation)
+        console.log("Test... function goes here")
+        equalsPressed();
+        clearButResult(operation.result);
+        operation.firstPart = operation.result;
+        operation.result = "";
+        operation.operator = pressedButton;
     } else if (isOperator(pressedButton) && operation.result != "") {
         operation.firstPart = operation.result;
         operation.result = "";
